@@ -1,5 +1,6 @@
 using System.Text;
 using API_Protect_With_AspNetCore_Identity.Models.Entities;
+using API_Protect_With_AspNetCore_Identity.Models.Options;
 using API_Protect_With_AspNetCore_Identity.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,8 @@ namespace API_Protect_With_AspNetCore_Identity
                 optionsBuilder.UseSqlite(connectionString);
             });
 
+            services.Configure<JwtOptions>(Configuration.GetSection("JWT"));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()  
                 .AddEntityFrameworkStores<ApplicationDbContext>()  
                 .AddDefaultTokenProviders();
@@ -56,9 +59,9 @@ namespace API_Protect_With_AspNetCore_Identity
                 {  
                     ValidateIssuer = true,  
                     ValidateAudience = true,  
-                    ValidAudience = Configuration["JWT:ValidAudience"],  
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],  
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
+                    ValidAudience = Configuration.GetSection("JWT").GetValue<string>("ValidAudience").ToString(),  
+                    ValidIssuer = Configuration.GetSection("JWT").GetValue<string>("ValidIssuer").ToString(),  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("JWT").GetValue<string>("Secret").ToString()))  
                 };  
             });
         }
