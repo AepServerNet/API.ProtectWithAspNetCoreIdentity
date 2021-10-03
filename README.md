@@ -5,8 +5,8 @@ This project was created using the code shown in the CSharpCorner article as an 
 
 
 ## Test users (DO NOT USE in production)
-Username: "utente"
+Username: utente
 
-Email: "user@example.com"
+Email: user@example.com
 
-Password: "Password1234!"
+Password: Password1234!
