@@ -28,9 +28,16 @@ namespace API_Protect_With_AspNetCore_Identity
         {
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(config =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API_Protect_With_AspNetCore_Identity", Version = "v1" });
+                config.SwaggerDoc("v1", new OpenApiInfo { Title = "API_Protect_With_AspNetCore_Identity", Version = "v1" });
+                config.AddSecurityDefinition("JWT Bearer Token", new OpenApiSecurityScheme()
+                {
+                    Description = "Nella casella sottostante digita <code>Bearer</code> seguito da uno spazio e dal token ottenuto in precedenza.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
             });
 
             services.AddDbContextPool<ApplicationDbContext>(optionsBuilder => {
