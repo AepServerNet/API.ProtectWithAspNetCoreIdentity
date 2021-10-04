@@ -60,7 +60,7 @@ namespace API_Protect_With_AspNetCore_Identity.Controllers
                 var token = new JwtSecurityToken(  
                     issuer: options.ValidIssuer,  
                     audience: options.ValidAudience,
-                    expires: DateTime.Now.AddHours(options.Expires),  
+                    expires: DateTime.Now.AddDays(options.Expires),  
                     claims: authClaims,  
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );  
