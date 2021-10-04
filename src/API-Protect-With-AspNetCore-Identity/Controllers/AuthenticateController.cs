@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SequentialGuid;
 
 namespace API_Protect_With_AspNetCore_Identity.Controllers
 {
@@ -26,8 +27,7 @@ namespace API_Protect_With_AspNetCore_Identity.Controllers
         private readonly IConfiguration configuration;  
         private readonly IOptionsMonitor<JwtOptions> jwtOptionsMonitor;
   
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, 
-                                    IConfiguration configuration, IOptionsMonitor<JwtOptions> jwtOptionsMonitor)  
+        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IOptionsMonitor<JwtOptions> jwtOptionsMonitor)  
         {  
             this.userManager = userManager;  
             this.roleManager = roleManager;  
@@ -45,11 +45,10 @@ namespace API_Protect_With_AspNetCore_Identity.Controllers
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))  
             {  
                 var userRoles = await userManager.GetRolesAsync(user);  
-  
                 var authClaims = new List<Claim>  
                 {  
                     new Claim(ClaimTypes.Name, user.UserName),  
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
+                    new Claim(JwtRegisteredClaimNames.Jti, SequentialGuidGenerator.Instance.NewGuid().ToString()),  
                 };  
   
                 foreach (var userRole in userRoles)  
@@ -91,7 +90,7 @@ namespace API_Protect_With_AspNetCore_Identity.Controllers
             ApplicationUser user = new ApplicationUser()  
             {  
                 Email = model.Email,  
-                SecurityStamp = Guid.NewGuid().ToString(),  
+                SecurityStamp = SequentialGuidGenerator.Instance.NewGuid().ToString(),  
                 UserName = model.Username  
             };  
 
@@ -127,7 +126,7 @@ namespace API_Protect_With_AspNetCore_Identity.Controllers
             ApplicationUser user = new ApplicationUser()  
             {  
                 Email = model.Email,  
-                SecurityStamp = Guid.NewGuid().ToString(),  
+                SecurityStamp = SequentialGuidGenerator.Instance.NewGuid().ToString(),  
                 UserName = model.Username  
             }; 
 
